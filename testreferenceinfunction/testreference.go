@@ -13,7 +13,7 @@ func main() {
 	myReference.Name = "Nome inicial"
 	myReference.Address = "Endereco inicial"
 
-	toString("Reference before sending to modification", myReference)
+	toString("Reference before sending for modification", myReference)
 
 	myReference.ReferenceUpdater("Name to be modified", "Address to be modified")
 
