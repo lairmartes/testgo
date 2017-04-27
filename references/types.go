@@ -1,4 +1,4 @@
-package testtypes
+package references
 
 // ReferenceTestType is used for testing in reference transfer
 type ReferenceTestType struct {
