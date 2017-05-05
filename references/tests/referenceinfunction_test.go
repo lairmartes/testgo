@@ -8,7 +8,7 @@ import (
 )
 
 const initialValueName = "Mr. Joe Doe"
-const initialValueAddress = "Where the streets has no name"
+const initialValueAddress = "Where the streets have no name"
 const modifiedValueName = "Mr. Someone"
 const modifiedValueAddress = "Where no one lives"
 const intReturnedIfStringsAreEquals = 0
