@@ -68,6 +68,7 @@ func TestJSONPerson(t *testing.T) {
 		showErrorDetailIfAny(t, personString, personTestDocRgNumber, personTest.Docs[0].Number)
 		showErrorDetailIfAny(t, personString, personTestDocRgIssuer, personTest.Docs[0].Issuer)
 		showErrorDetailIfAny(t, personString, personTestDocTitType, personTest.Docs[1].Type)
+		
 		showErrorDetailIfAny(t, personString, personTestDocTitNumber, personTest.Docs[1].Number)
 		showErrorDetailIfAny(t, personString, personTestDocTitIssuer, personTest.Docs[1].Issuer)
 	}
