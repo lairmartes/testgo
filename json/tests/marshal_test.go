@@ -45,7 +45,7 @@ func TestJSONConversion(t *testing.T) {
 
 	paramtest, err = json.UnmarshalJSONString(jsonTestString)
 
-	t.Log(">>> Testing JSON unmarshalling")
+	t.Log(">>> Testing Param (simple JSON) unmarshalling")
 
 	if err != nil {
 		t.Errorf("An error ocurred while trying to unmarshal JSON string (%s). Erro: %s", jsonTestString, err)
@@ -71,6 +71,8 @@ func TestJSONPerson(t *testing.T) {
 
 	personTest, err = json.UnmarshalPersonString(personString)
 
+	t.Log(">>> Testing Person (a bit more complex JSON) unmarshalling")
+
 	if err != nil {
 		t.Errorf("An error ocurred while trying to unmarshal JSON string (%s). Erro: %s", personString, err)
 	} else {
@@ -95,49 +97,64 @@ func TestJSONPersonDNA(t *testing.T) {
 
 	personTest, err = json.UnmarshalPersonDNAString(personString)
 
+	t.Log(">>> Testing PersonDNA (a complex JSON) unmarshalling")
+
 	if err != nil {
 		t.Errorf("An error ocurred while trying to unmarshal JSON string (%s). Erro: %s", personString, err)
 	} else {
 
-		/*
-			var personDNADataAttachment = []string{"429437932749872482394", "back.png", "ASDJL3KJFDSLJKFSDLJ34", "true"}
-			var personDNADataDoc1 = []string{"RG", "11223344", "2000-01-01T21:35:14.052975+02:00", "SSP/SP"}
-			var personDNADataAddressProof = personDNADataAttachment
-			var personDNADataParticipants = [][]string{{"1", "10.0.1.10", "mvp-dna-if1"}, {"2", "10.0.1.11", "mvp-dna-if2"}}
-		*/
-
-		showErrorDetailIfAny(t, personString, personDNAData[0], personTest.CPF)
-		showErrorDetailIfAny(t, personString, personDNAData[1], personTest.Nome)
-		showErrorDetailIfAny(t, personString, personDNAData[2], personTest.NomeDoPai)
-		showErrorDetailIfAny(t, personString, personDNAData[3], personTest.NomeDaMae)
-
-		showErrorDetailIfAny(t, personString, personDNADataAddress1[0], personTest.EnderecoCorrespondencia.Logradouro)
-		showErrorDetailIfAny(t, personString, personDNADataAddress1[1], strconv.Itoa(personTest.EnderecoCorrespondencia.Numero))
-		showErrorDetailIfAny(t, personString, personDNADataAddress1[2], personTest.EnderecoCorrespondencia.Bairro)
-		showErrorDetailIfAny(t, personString, personDNADataAddress1[3], personTest.EnderecoCorrespondencia.Cidade)
-		showErrorDetailIfAny(t, personString, personDNADataAddress1[4], personTest.EnderecoCorrespondencia.Estado)
-		showErrorDetailIfAny(t, personString, personDNADataAddress1[5], personTest.EnderecoCorrespondencia.Cep)
-
-		showErrorDetailIfAny(t, personString, personDNADataAddress2[0], personTest.EnderecoOutro.Logradouro)
-		showErrorDetailIfAny(t, personString, personDNADataAddress2[1], strconv.Itoa(personTest.EnderecoOutro.Numero))
-		showErrorDetailIfAny(t, personString, personDNADataAddress2[2], personTest.EnderecoOutro.Bairro)
-		showErrorDetailIfAny(t, personString, personDNADataAddress2[3], personTest.EnderecoOutro.Cidade)
-		showErrorDetailIfAny(t, personString, personDNADataAddress2[4], personTest.EnderecoOutro.Estado)
-		showErrorDetailIfAny(t, personString, personDNADataAddress2[5], personTest.EnderecoOutro.Cep)
-
-		showErrorDetailIfAny(t, personString, personDNADataPhones[0], personTest.Telefone1)
-		showErrorDetailIfAny(t, personString, personDNADataPhones[1], personTest.Telefone2)
-
-		showErrorDetailIfAny(t, personString, personDNADataOthers[0], personTest.Nacionalidade)
-		//showErrorDetailIfAny(t, personString, personDNADataOthers[1], personTest.DataDeNascimento.String()) - a bit hard to test date since format doesn't match
-		showErrorDetailIfAny(t, personString, personDNADataOthers[2], personTest.Sexo)
-		showErrorDetailIfAny(t, personString, personDNADataOthers[3], personTest.EstadoCivil)
-		showErrorDetailIfAny(t, personString, personDNADataOthers[4], personTest.Profissao)
-		showErrorDetailIfAny(t, personString, personDNADataOthers[5], personTest.LocalNascimento)
-
-		showErrorDetailIfAny(t, personString, personDNADataAddressProof[0], personTest.ComprovanteResidencia.ID)
-
+		checkPerson(t, personString, personTest)
 	}
+}
+
+func checkPerson(t *testing.T, personString string, personTest persondna.PersonDNA) {
+
+	showErrorDetailIfAny(t, personString, personDNAData[0], personTest.CPF)
+	showErrorDetailIfAny(t, personString, personDNAData[1], personTest.Nome)
+	showErrorDetailIfAny(t, personString, personDNAData[2], personTest.NomeDoPai)
+	showErrorDetailIfAny(t, personString, personDNAData[3], personTest.NomeDaMae)
+
+	showErrorDetailIfAny(t, personString, personDNADataAddress1[0], personTest.EnderecoCorrespondencia.Logradouro)
+	showErrorDetailIfAny(t, personString, personDNADataAddress1[1], strconv.Itoa(personTest.EnderecoCorrespondencia.Numero))
+	showErrorDetailIfAny(t, personString, personDNADataAddress1[2], personTest.EnderecoCorrespondencia.Bairro)
+	showErrorDetailIfAny(t, personString, personDNADataAddress1[3], personTest.EnderecoCorrespondencia.Cidade)
+	showErrorDetailIfAny(t, personString, personDNADataAddress1[4], personTest.EnderecoCorrespondencia.Estado)
+	showErrorDetailIfAny(t, personString, personDNADataAddress1[5], personTest.EnderecoCorrespondencia.Cep)
+
+	showErrorDetailIfAny(t, personString, personDNADataAddress2[0], personTest.EnderecoOutro.Logradouro)
+	showErrorDetailIfAny(t, personString, personDNADataAddress2[1], strconv.Itoa(personTest.EnderecoOutro.Numero))
+	showErrorDetailIfAny(t, personString, personDNADataAddress2[2], personTest.EnderecoOutro.Bairro)
+	showErrorDetailIfAny(t, personString, personDNADataAddress2[3], personTest.EnderecoOutro.Cidade)
+	showErrorDetailIfAny(t, personString, personDNADataAddress2[4], personTest.EnderecoOutro.Estado)
+	showErrorDetailIfAny(t, personString, personDNADataAddress2[5], personTest.EnderecoOutro.Cep)
+
+	showErrorDetailIfAny(t, personString, personDNADataPhones[0], personTest.Telefone1)
+	showErrorDetailIfAny(t, personString, personDNADataPhones[1], personTest.Telefone2)
+
+	showErrorDetailIfAny(t, personString, personDNADataOthers[0], personTest.Nacionalidade)
+	//showErrorDetailIfAny(t, personString, personDNADataOthers[1], personTest.DataDeNascimento.String()) - a bit hard to test date since format doesn't match
+	showErrorDetailIfAny(t, personString, personDNADataOthers[2], personTest.Sexo)
+	showErrorDetailIfAny(t, personString, personDNADataOthers[3], personTest.EstadoCivil)
+	showErrorDetailIfAny(t, personString, personDNADataOthers[4], personTest.Profissao)
+	showErrorDetailIfAny(t, personString, personDNADataOthers[5], personTest.LocalNascimento)
+
+	showErrorDetailIfAny(t, personString, personDNADataAddressProof[0], personTest.ComprovanteResidencia.ID)
+	showErrorDetailIfAny(t, personString, personDNADataAddressProof[1], personTest.ComprovanteResidencia.Nome)
+	showErrorDetailIfAny(t, personString, personDNADataAddressProof[2], personTest.ComprovanteResidencia.SecureHash)
+	showErrorDetailIfAny(t, personString, personDNADataAddressProof[3], strconv.FormatBool(personTest.ComprovanteResidencia.Active))
+
+	showErrorDetailIfAny(t, personString, personDNADataDoc1[0], personTest.DocumentosIdentificacao[0].Tipo)
+	showErrorDetailIfAny(t, personString, personDNADataDoc1[1], personTest.DocumentosIdentificacao[0].Numero)
+	//showErrorDetailIfAny(t, personString, personDNADataDoc1[2], personTest.DocumentosIdentificacao[0].DataEmissao.String()) - a bit hard to test date since format doesn't match
+	showErrorDetailIfAny(t, personString, personDNADataDoc1[3], personTest.DocumentosIdentificacao[0].OrgaoExpedidor)
+
+	showErrorDetailIfAny(t, personString, personDNADataParticipants[0][0], personTest.Participantes[0].ID)
+	showErrorDetailIfAny(t, personString, personDNADataParticipants[0][1], personTest.Participantes[0].Address)
+	showErrorDetailIfAny(t, personString, personDNADataParticipants[0][2], personTest.Participantes[0].Nome)
+
+	showErrorDetailIfAny(t, personString, personDNADataParticipants[1][0], personTest.Participantes[1].ID)
+	showErrorDetailIfAny(t, personString, personDNADataParticipants[1][1], personTest.Participantes[1].Address)
+	showErrorDetailIfAny(t, personString, personDNADataParticipants[1][2], personTest.Participantes[1].Nome)
 }
 
 func buildPersonString() string {
