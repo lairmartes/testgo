@@ -6,7 +6,7 @@ import (
 	"github.com/lairmartes/testgo/json/persondna"
 )
 
-// Unmarshal Param
+// UnmarshalJSONString unmarshals very simple Param
 func UnmarshalJSONString(stringInJSONFormat string) (Param, error) {
 
 	var result Param
@@ -17,7 +17,7 @@ func UnmarshalJSONString(stringInJSONFormat string) (Param, error) {
 	return result, err
 }
 
-// Unmarshal Person
+// UnmarshalPersonString unmarshals simple Person
 func UnmarshalPersonString(stringInJSONFormat string) (Person, error) {
 
 	var result Person
@@ -28,10 +28,21 @@ func UnmarshalPersonString(stringInJSONFormat string) (Person, error) {
 	return result, err
 }
 
-//Unmarshal PersonDNA
+//UnmarshalPersonDNAString unmarshals more complex PersonDNA
 func UnmarshalPersonDNAString(stringInJSONFormat string) (persondna.PersonDNA, error) {
 
 	var result persondna.PersonDNA
+	var err error
+
+	err = json.Unmarshal([]byte(stringInJSONFormat), &result)
+
+	return result, err
+}
+
+//UnmarshalCreatePersonDNAArgs unmarshals Hyperledger's create PersonDNA function
+func UnmarshalCreatePersonDNAArgs(stringInJSONFormat string) (persondna.CreatePersonDNA, error) {
+
+	var result persondna.CreatePersonDNA
 	var err error
 
 	err = json.Unmarshal([]byte(stringInJSONFormat), &result)

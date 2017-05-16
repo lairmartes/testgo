@@ -38,6 +38,9 @@ var personDNADataDoc1 = []string{"RG", "11223344", "2000-01-01T21:35:14.052975+0
 var personDNADataAddressProof = personDNADataAttachment
 var personDNADataParticipants = [][]string{{"1", "10.0.1.10", "mvp-dna-if1"}, {"2", "10.0.1.11", "mvp-dna-if2"}}
 
+const hyperledgerArgCreate = "create"
+const hyperledterArgCreateCode = "12312312387"
+
 func TestJSONConversion(t *testing.T) {
 
 	var err error
@@ -46,6 +49,7 @@ func TestJSONConversion(t *testing.T) {
 	paramtest, err = json.UnmarshalJSONString(jsonTestString)
 
 	t.Log(">>> Testing Param (simple JSON) unmarshalling")
+	t.Log(jsonTestString)
 
 	if err != nil {
 		t.Errorf("An error ocurred while trying to unmarshal JSON string (%s). Erro: %s", jsonTestString, err)
@@ -72,6 +76,7 @@ func TestJSONPerson(t *testing.T) {
 	personTest, err = json.UnmarshalPersonString(personString)
 
 	t.Log(">>> Testing Person (a bit more complex JSON) unmarshalling")
+	t.Log(personString)
 
 	if err != nil {
 		t.Errorf("An error ocurred while trying to unmarshal JSON string (%s). Erro: %s", personString, err)
@@ -98,16 +103,37 @@ func TestJSONPersonDNA(t *testing.T) {
 	personTest, err = json.UnmarshalPersonDNAString(personString)
 
 	t.Log(">>> Testing PersonDNA (a complex JSON) unmarshalling")
+	t.Log(personString)
 
 	if err != nil {
 		t.Errorf("An error ocurred while trying to unmarshal JSON string (%s). Erro: %s", personString, err)
 	} else {
 
-		checkPerson(t, personString, personTest)
+		checkPerson(t, personString, &personTest)
 	}
 }
 
-func checkPerson(t *testing.T, personString string, personTest persondna.PersonDNA) {
+func TestJSONHyperledgerArgs(t *testing.T) {
+
+	var err error
+	var createTest persondna.CreatePersonDNA
+	var createString = buildHyperledgerCreateArgs()
+
+	createTest, err = json.UnmarshalCreatePersonDNAArgs(createString)
+
+	t.Log(">>> Testing Create Person DNA - Args sending PersonDNA to be created")
+	t.Log(createString)
+
+	if err != nil {
+		t.Errorf("An error ocurred while trying to unmarshal JSON string (%s). Erro: %s", createString, err)
+	} else {
+		showErrorDetailIfAny(t, createString, hyperledgerArgCreate, createTest.Args[0].Function)
+		showErrorDetailIfAny(t, createString, hyperledterArgCreateCode, createTest.Args[0].AccessCode)
+		checkPerson(t, createString, createTest.Args[0].Parameter)
+	}
+}
+
+func checkPerson(t *testing.T, personString string, personTest *persondna.PersonDNA) {
 
 	showErrorDetailIfAny(t, personString, personDNAData[0], personTest.CPF)
 	showErrorDetailIfAny(t, personString, personDNAData[1], personTest.Nome)
@@ -205,9 +231,17 @@ func buildPersonDNAString() string {
 	return result
 }
 
-func showErrorDetailIfAny(t *testing.T, personString, expectedValue, actualValue string) {
+func buildHyperledgerCreateArgs() string {
+
+	var result = "{\"Args\":[\"" + hyperledgerArgCreate + "\",\"" + hyperledterArgCreateCode + "\"," + buildPersonDNAString() + "]}"
+
+	return result
+
+}
+
+func showErrorDetailIfAny(t *testing.T, unmashalledString, expectedValue, actualValue string) {
 
 	if strings.Compare(expectedValue, actualValue) != intReturnedIfStringsAreEquals {
-		t.Errorf("JSON string %s has been converted in wrong way. Should be %s, but is %s", personString, expectedValue, actualValue)
+		t.Errorf("JSON string %s has been converted in wrong way. Should be %s, but is %s", unmashalledString, expectedValue, actualValue)
 	}
 }
